@@ -52,4 +52,17 @@ public class Server
 			}
 		}
 	}
+	
+	public static void disconnect(InetAddress address, int port)
+	{
+		DatagramPacket p = new DatagramPacket("disconnect".getBytes(), "disconnect".getBytes().length, address, port);
+		try
+		{
+			server.send(p);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
 }
