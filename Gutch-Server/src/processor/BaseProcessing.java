@@ -22,7 +22,7 @@ public class BaseProcessing implements Runnable
 		
 		try
 		{
-			Server.broadcast(packet.getData().toString());
+			Server.broadcast(data);
 		}
 		catch (SocketException e)
 		{
