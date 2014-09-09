@@ -3,6 +3,7 @@ package processor;
 import java.net.DatagramPacket;
 import java.net.SocketException;
 
+import receiver.Connected;
 import receiver.Server;
 
 public class BaseProcessing implements Runnable
@@ -18,11 +19,15 @@ public class BaseProcessing implements Runnable
 	@Override
 	public void run()
 	{
+		System.out.println("InetAddress: " + packet.getAddress());
+		Connected.add(packet.getAddress(), packet.getPort());
+		
+		System.out.println("Doing things.");
 		String data = packet.getData().toString();
 		
 		try
 		{
-			Server.broadcast(data);
+			Server.broadcast(data, packet.getAddress());
 		}
 		catch (SocketException e)
 		{

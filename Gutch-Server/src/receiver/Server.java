@@ -12,7 +12,9 @@ public class Server
 {
 	private static DatagramSocket server;
 	
-	public Server()
+	private static Server instance;
+	
+	private Server()
 	{
 		try
 		{
@@ -22,14 +24,22 @@ public class Server
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public void start()
+	{
+		DatagramPacket temp = new DatagramPacket("".getBytes(), 0);
 		
-		DatagramPacket temp = new DatagramPacket(null, 0);
 		
 		try
 		{
-			server.receive(temp);
+			while (true)
+			{
+				System.out.println("Listening...");
+				server.receive(temp);
 			
-			new Thread(new BaseProcessing(temp)).start();
+				new Thread(new BaseProcessing(temp)).start();
+			}
 		}
 		catch (IOException e)
 		{
@@ -38,12 +48,28 @@ public class Server
 		}
 	}
 	
-	public static void broadcast(String data) throws SocketException
+	public static Server getInstance()
+	{
+		if (instance == null)
+		{
+			instance = new Server();
+		}
+		
+		return instance;
+	}
+	
+	public static void broadcast(String data, InetAddress exclude) throws SocketException
 	{
 		for (InetAddress ia: Connected.getKeySet())
 		{
+			if (ia.equals(exclude))
+			{
+				continue;
+			}
 			try
 			{
+				System.out.println("Sending: " + data);
+				System.out.println("To: " + ia.getHostAddress());
 				server.send(new DatagramPacket(data.getBytes(), data.getBytes().length, ia, Connected.get(ia)));
 			}
 			catch (IOException e)
