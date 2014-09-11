@@ -58,7 +58,7 @@ public class Server
 		return instance;
 	}
 	
-	public static void broadcast(String data, InetAddress exclude) throws SocketException
+	public synchronized static void broadcast(String data, InetAddress exclude) throws SocketException
 	{
 		for (InetAddress ia: Connected.getKeySet())
 		{

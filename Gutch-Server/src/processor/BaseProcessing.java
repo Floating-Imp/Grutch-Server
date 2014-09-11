@@ -20,10 +20,16 @@ public class BaseProcessing implements Runnable
 	public void run()
 	{
 		System.out.println("InetAddress: " + packet.getAddress());
+		System.out.println("Connected ips: " + Connected.getKeySet().toString());
 		Connected.add(packet.getAddress(), packet.getPort());
-		
+		System.out.println("Connected ips: " + Connected.getKeySet().toString());
 		System.out.println("Doing things.");
 		String data = packet.getData().toString();
+		
+		if (data.contains("has left."))
+		{
+			Connected.remove(packet.getAddress());
+		}
 		
 		try
 		{
