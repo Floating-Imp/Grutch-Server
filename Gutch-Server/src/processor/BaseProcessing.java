@@ -1,5 +1,6 @@
 package processor;
 
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.SocketException;
 
@@ -24,7 +25,16 @@ public class BaseProcessing implements Runnable
 		Connected.add(packet.getAddress(), packet.getPort());
 		System.out.println("Connected ips: " + Connected.getKeySet().toString());
 		System.out.println("Doing things.");
-		String data = packet.getData().toString();
+		String data = "Failed";
+		try
+		{
+			data = new String(packet.getData(), "UTF-8");
+		}
+		catch (UnsupportedEncodingException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		if (data.contains("has left."))
 		{
@@ -33,7 +43,7 @@ public class BaseProcessing implements Runnable
 		
 		try
 		{
-			Server.broadcast(data, packet.getAddress());
+			Server.broadcast(data, packet.getAddress(), packet.getPort());
 		}
 		catch (SocketException e)
 		{

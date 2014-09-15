@@ -28,13 +28,11 @@ public class Server
 	
 	public void start()
 	{
-		DatagramPacket temp = new DatagramPacket("".getBytes(), 0);
-		
-		
 		try
 		{
 			while (true)
 			{
+				DatagramPacket temp = new DatagramPacket(new byte[2048], 2048);
 				System.out.println("Listening...");
 				server.receive(temp);
 			
@@ -58,19 +56,20 @@ public class Server
 		return instance;
 	}
 	
-	public synchronized static void broadcast(String data, InetAddress exclude) throws SocketException
+	public synchronized static void broadcast(String data, InetAddress exclude, int portExclude) throws SocketException
 	{
+
 		for (InetAddress ia: Connected.getKeySet())
 		{
-			if (ia.equals(exclude))
-			{
-				continue;
-			}
+//			if (ia.equals(exclude) && Connected.get(ia) == portExclude)
+//			{
+//				continue;
+//			}
 			try
 			{
 				System.out.println("Sending: " + data);
-				System.out.println("To: " + ia.getHostAddress());
-				server.send(new DatagramPacket(data.getBytes(), data.getBytes().length, ia, Connected.get(ia)));
+				System.out.println("To: " + ia.getHostAddress() + ":" + (Connected.get(ia) + 1));
+				server.send(new DatagramPacket(data.getBytes(), data.getBytes().length, ia, Connected.get(ia) + 1));
 			}
 			catch (IOException e)
 			{
