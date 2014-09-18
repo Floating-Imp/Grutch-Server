@@ -5,7 +5,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 
+import Users.User;
 import processor.BaseProcessing;
 
 public class Server
@@ -13,6 +16,8 @@ public class Server
 	private static DatagramSocket server;
 	
 	private static Server instance;
+	
+	private static List<User> users = new ArrayList<User>();
 	
 	private Server()
 	{
@@ -56,20 +61,15 @@ public class Server
 		return instance;
 	}
 	
-	public synchronized static void broadcast(String data, InetAddress exclude, int portExclude) throws SocketException
+	public synchronized static void broadcast(byte[] data) throws SocketException
 	{
 
-		for (InetAddress ia: Connected.getKeySet())
+		for (User u : users)
 		{
-//			if (ia.equals(exclude) && Connected.get(ia) == portExclude)
-//			{
-//				continue;
-//			}
 			try
 			{
-				System.out.println("Sending: " + data);
-				System.out.println("To: " + ia.getHostAddress() + ":" + (Connected.get(ia) + 1));
-				server.send(new DatagramPacket(data.getBytes(), data.getBytes().length, ia, Connected.get(ia) + 1));
+				System.out.println("To: " + u.getIP() + ":" + (u.getPort() + 1));
+				server.send(new DatagramPacket(data, data.length, u.getIP(), u.getPort() + 1));
 			}
 			catch (IOException e)
 			{
@@ -88,6 +88,22 @@ public class Server
 		catch (IOException e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	public static List<User> getUsers()
+	{
+		return users;
+	}
+	
+	public static void removeUser(InetAddress ip)
+	{
+		for (User u : users)
+		{
+			if (u.getIP().equals(ip))
+			{
+				users.remove(u);
+			}
 		}
 	}
 }

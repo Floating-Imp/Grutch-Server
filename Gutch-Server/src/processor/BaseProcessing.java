@@ -1,10 +1,14 @@
 package processor;
 
+import java.awt.Color;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.SocketException;
 
-import receiver.Connected;
+import commands.Command;
+import commands.Commands;
+
+import Users.User;
 import receiver.Server;
 
 public class BaseProcessing implements Runnable
@@ -20,15 +24,28 @@ public class BaseProcessing implements Runnable
 	@Override
 	public void run()
 	{
-		System.out.println("InetAddress: " + packet.getAddress());
-		System.out.println("Connected ips: " + Connected.getKeySet().toString());
-		Connected.add(packet.getAddress(), packet.getPort());
-		System.out.println("Connected ips: " + Connected.getKeySet().toString());
-		System.out.println("Doing things.");
-		String data = "Failed";
+		User currentUser = new User(packet.getAddress(), packet.getPort());
+		
+		boolean userExists = false;
+		
+		for (User u : Server.getUsers())
+		{
+			if (u.getIP().equals(packet.getAddress()) && u.getPort() == packet.getPort())
+			{
+				userExists = true;
+				currentUser = u;
+			}
+		}
+		
+		if (!userExists)
+		{
+			Server.getUsers().add(currentUser);
+		}
+		
+		String packetData = "";
 		try
 		{
-			data = new String(packet.getData(), "UTF-8");
+			packetData = new String(packet.getData(), "UTF-8");
 		}
 		catch (UnsupportedEncodingException e1)
 		{
@@ -36,14 +53,25 @@ public class BaseProcessing implements Runnable
 			e1.printStackTrace();
 		}
 		
-		if (data.contains("has left."))
+		packetData = packetData.trim();
+		
+		Data data = new Data(packetData.split("\\|")[1], packetData.split("\\|")[0], currentUser.getColor(), packet.getAddress());
+		
+		for (Commands c : Commands.values())
 		{
-			Connected.remove(packet.getAddress());
+			if (data.getText().startsWith(Command.getCommandChar() + c.getValue().getCommandText()))
+			{
+				data = c.getValue().execute(data);
+				break;
+			}
 		}
 		
 		try
 		{
-			Server.broadcast(data, packet.getAddress(), packet.getPort());
+			if (data != null && data.getData() != null)
+			{
+				Server.broadcast(data.getData());
+			}
 		}
 		catch (SocketException e)
 		{
