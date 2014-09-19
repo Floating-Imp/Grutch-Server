@@ -1,6 +1,5 @@
 package processor;
 
-import java.awt.Color;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.SocketException;
