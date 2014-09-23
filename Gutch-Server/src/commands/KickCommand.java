@@ -1,8 +1,8 @@
 package commands;
 
-import Users.User;
 import processor.Data;
 import receiver.Server;
+import users.User;
 
 public class KickCommand extends Command
 {

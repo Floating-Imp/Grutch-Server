@@ -6,9 +6,8 @@ import java.net.SocketException;
 
 import commands.Command;
 import commands.Commands;
-
-import Users.User;
 import receiver.Server;
+import users.User;
 
 public class BaseProcessing implements Runnable
 {

@@ -3,9 +3,9 @@ package commands;
 import java.awt.Color;
 import java.lang.reflect.Field;
 
-import Users.User;
 import processor.Data;
 import receiver.Server;
+import users.User;
 
 public class ColorCommand extends Command
 {

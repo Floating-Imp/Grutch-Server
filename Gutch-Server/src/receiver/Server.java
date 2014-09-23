@@ -8,8 +8,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
-import Users.User;
 import processor.BaseProcessing;
+import users.User;
 
 public class Server
 {

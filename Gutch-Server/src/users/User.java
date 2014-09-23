@@ -1,4 +1,4 @@
-package Users;
+package users;
 import java.awt.Color;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
