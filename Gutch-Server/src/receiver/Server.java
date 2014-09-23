@@ -38,7 +38,7 @@ public class Server
 			while (true)
 			{
 				DatagramPacket temp = new DatagramPacket(new byte[2048], 2048);
-				System.out.println("Listening...");
+				Server.print("Listening...");
 				server.receive(temp);
 			
 				new Thread(new BaseProcessing(temp)).start();
@@ -68,7 +68,7 @@ public class Server
 		{
 			try
 			{
-				System.out.println("To: " + u.getIP() + ":" + (u.getPort() + 1));
+				Server.print("To: " + u.getIP() + ":" + (u.getPort() + 1));
 				server.send(new DatagramPacket(data, data.length, u.getIP(), u.getPort() + 1));
 			}
 			catch (IOException e)
@@ -105,5 +105,10 @@ public class Server
 				users.remove(u);
 			}
 		}
+	}
+	
+	public static synchronized void print(String s)
+	{
+		System.out.println(s);
 	}
 }

@@ -23,7 +23,7 @@ public class BaseProcessing implements Runnable
 	@Override
 	public void run()
 	{
-		User currentUser = new User(packet.getAddress(), packet.getPort());
+		User currentUser = new User(packet);
 		
 		boolean userExists = false;
 		

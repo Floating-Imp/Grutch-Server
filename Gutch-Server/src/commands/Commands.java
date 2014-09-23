@@ -5,7 +5,8 @@ public enum Commands
 	me (new MeCommand()),
 	exit (new ExitCommand()),
 	color (new ColorCommand()),
-	help (new HelpCommand());
+	help (new HelpCommand()),
+	kick (new KickCommand());
 	
 	private Command command;
 	
