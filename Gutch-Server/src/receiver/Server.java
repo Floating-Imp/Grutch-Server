@@ -38,7 +38,6 @@ public class Server
 			while (true)
 			{
 				DatagramPacket temp = new DatagramPacket(new byte[2048], 2048);
-				Server.print("Listening...");
 				server.receive(temp);
 			
 				new Thread(new BaseProcessing(temp)).start();
@@ -68,7 +67,8 @@ public class Server
 		{
 			try
 			{
-				Server.print("To: " + u.getIP() + ":" + (u.getPort() + 1));
+				String toPrint = new String(data, "UTF-8");
+				Server.print("[" + toPrint.split("\\|")[0] + "]: " + toPrint.split("\\|")[1]);
 				server.send(new DatagramPacket(data, data.length, u.getIP(), u.getPort() + 1));
 			}
 			catch (IOException e)
