@@ -4,7 +4,8 @@ public enum ServerCommands
 {
 	kick (new KickCommand()),
 	say (new SayCommand()),
-	who (new WhoCommand());
+	who (new WhoCommand()),
+	exit (new ExitCommand());
 	
 	private ServerCommand command;
 	

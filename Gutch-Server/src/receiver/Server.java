@@ -17,6 +17,8 @@ public class Server
 	
 	private static Server instance;
 	
+	private boolean isRunning = true;
+	
 	private static List<User> users = new ArrayList<User>();
 	
 	private Server()
@@ -35,7 +37,7 @@ public class Server
 	{
 		try
 		{
-			while (true)
+			while (isRunning)
 			{
 				DatagramPacket temp = new DatagramPacket(new byte[2048], 2048);
 				server.receive(temp);
@@ -110,5 +112,10 @@ public class Server
 	public static synchronized void print(String s)
 	{
 		System.out.println(s);
+	}
+	
+	public static void stop()
+	{
+		getInstance().isRunning = false;
 	}
 }
